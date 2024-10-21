@@ -1,7 +1,7 @@
 import { get } from "mongoose";
 import User from "./user.model.js"
 import bcrypt from "bcrypt";
-
+import jwt from "jsonwebtoken";
 const signup = async(userData)=>{
  try {
     const data = {...userData}
@@ -13,7 +13,17 @@ const signup = async(userData)=>{
     console.log(error)
  }
 }
-
+const login = async (userdata) =>{
+  const isuser = await User.findOne({email: userdata.email})
+  if(!isuser){
+    throw new Error("User not found")
+  }
+  const ispassword = await bcrypt.compare(userdata.password,isuser.password)
+  if(!ispassword){
+    throw new Error("Password did not matched")
+  }
+  return isuser;
+}
 const getalluser = async ()=>{
     const result = await User.find({})
     return result
@@ -28,7 +38,7 @@ const delateOne = async (userId)=>{
 }
 const userService ={
     signup,
- 
+    login,
     getalluser,
     delateOne
 
