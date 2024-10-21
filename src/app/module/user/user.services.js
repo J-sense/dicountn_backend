@@ -13,26 +13,7 @@ const signup = async(userData)=>{
     console.log(error)
  }
 }
-const login = async (userData) => {
-    try {
-      const isuser = await User.findOne({ email: userData.email });
-      if (!isuser) {
-        throw new Error('User not found');
-      }
-  
-      console.log('Plain text password:', userData.password);  // Debug
-      console.log('Hashed password from DB:', isuser.password);  // Debug
-  
-      const ispassword = await bcrypt.compare(userData.password, isuser.password);
-      if (!ispassword) {
-        throw new Error('Password not matched');
-      }
-  
-      return isuser;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
 const getalluser = async ()=>{
     const result = await User.find({})
     return result
@@ -47,7 +28,7 @@ const delateOne = async (userId)=>{
 }
 const userService ={
     signup,
-    login,
+ 
     getalluser,
     delateOne
 
