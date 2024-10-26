@@ -1,5 +1,5 @@
 import userService from "./user.services.js"
-
+import jwt from "jsonwebtoken";
 const signup = async (req,res,next)=>{
    try {
     const result = await userService.signup(req.body)
@@ -15,9 +15,11 @@ const signup = async (req,res,next)=>{
 const login = async (req,res,next)=>{
     try {
         const result = await userService.login(req.body)
+        const {password, ...others} = result.data.toObject()
             res.status(200).json({
             message:"User login successfully",
-            data:result,
+            data:others,
+            token:result.token,
             success:true,
     })
     } catch (error) {
@@ -51,11 +53,24 @@ const delateOne = async (req,res,next)=>{
     }
     
 }
+const myprofile = async (req,res,next)=>{
+    const decode = jwt.verify(req.headers.authorization,"hotelmanagement123")
+    console.log(decode)
+    try {
+        const result = await userService.myprofile(decode.email)
+        res.status(200).json({
+        data:result,
+        message:"get my profile successfully"
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 const userController = {
     signup,
     login,
     getall,
-    delateOne
+    delateOne,myprofile
    
 }
 export default userController;

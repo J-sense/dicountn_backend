@@ -22,7 +22,20 @@ const login = async (userdata) =>{
   if(!ispassword){
     throw new Error("Password did not matched")
   }
-  return isuser;
+  const obj = {
+    email:isuser.email,
+    role:isuser.role
+    
+  }
+  const token = jwt.sign(obj,"hotelmanagement123",{expiresIn:"7d"})
+  return {
+    data:isuser,
+    token: token
+  }
+}
+const myprofile = async (email) =>{
+  const myprofile = await User.findOne({email: email})
+  return myprofile
 }
 const getalluser = async ()=>{
     const result = await User.find({})
@@ -40,7 +53,8 @@ const userService ={
     signup,
     login,
     getalluser,
-    delateOne
+    delateOne,
+    myprofile
 
 }
 export default userService;
