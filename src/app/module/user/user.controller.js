@@ -60,7 +60,7 @@ const myprofile = async (req,res,next)=>{
         const result = await userService.myprofile(decode.email)
         res.status(200).json({
         data:result,
-        message:"get my profile successfully"
+        message:"get my profile successfull"
         })
     } catch (error) {
         next(error)
